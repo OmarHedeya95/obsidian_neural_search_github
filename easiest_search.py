@@ -14,7 +14,7 @@ import argparse
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Control variable for indexing and searching")
-    parser.add_argument('--index', type=str,
+    parser.add_argument('--indexed', type=str,
                         help='Is your data already indexed?', required=True)
     parser.add_argument('--search', type=str,
                         help='Should I search your data?', required=True)
