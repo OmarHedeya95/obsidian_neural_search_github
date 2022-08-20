@@ -1,3 +1,5 @@
+![screen-gif](./obsidian_neural_search.gif)
+
 # Setting up the repository
 1. Install conda and create a new environment using python 3.7 -> `conda create -n <env-name> python=3.7`
 2. Install jina ai -> `conda install jina -c conda-forge`
