@@ -8,18 +8,28 @@ from utils import get_highlight_with_embedded_notes, get_list_of_updated_notes, 
 from tqdm import tqdm
 import argparse
 
-if __name__ == '__main__':
 
+
+
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Control variable for indexing and searching")
-    parser.add_argument('--indexed', type=str,
+    parser.add_argument('--index', type=str,
                         help='Is your data already indexed?', required=True)
     parser.add_argument('--search', type=str,
-                        help='Should I search your data', required=True)
-
+                        help='Should I search your data?', required=True)
+    parser.add_argument('--duplicate', type=str,
+                        help='Should I remove duplicates from database?', required=False)
     args = parser.parse_args()
-    is_indexed = True if args.indexed == "True" else False
+    is_indexed = True if args.index == "True" else False
     to_search = True if args.search == "True" else False
+    remove_duplicates = True if args.duplicate == "True" else False
+    
+    if remove_duplicates:
+        print("Removing Duplicates from database....")
+        duplicate_flow = Flow.load_config('./flow_simple.jina.yml')
+        with duplicate_flow:
+            duplicate_flow.post(on='/duplicate_removal')
 
     if is_indexed == False:
 
@@ -67,5 +77,5 @@ if __name__ == '__main__':
             encoded_query = encode_sentences(query)
             searching_flow.post(on='/search', data=encoded_query)
         else:
-            searching_flow.post(on='/validate')
+            #searching_flow.post(on='/validate')
             pass

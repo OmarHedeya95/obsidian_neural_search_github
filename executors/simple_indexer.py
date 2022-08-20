@@ -16,25 +16,29 @@ class SimpleIndexer(Executor):
     def remove_duplicates(self, **kwargs):
         repeat = dict()
 
-        for doc in self._docs:
+        for i, doc in enumerate(self._docs):
             if not repeat.get(doc.text):
                 repeat[doc.text] = {'occurence': 1, 'id': doc.id}
             else:
                 original = self._docs[repeat[doc.text]['id']]
                 # Due to saving document title as first highlight and not as file name we check if first chunks are equal
-                if original.chunks[0].text == doc.chunks[0].text:                   
-                    self._docs.remove(original)
-                    original.chunks.clear()
+                if original.chunks and doc.chunks:
+                    if original.chunks[0].text == doc.chunks[0].text:
+                        if len(original.chunks) == len(doc.chunks):
+                            self._docs.remove(original)
+                            original.chunks.clear()
+                            self._docs.__delitem__(i)
 
 
     @requests(on='/remove_old_note')
     def remove_old_note(self, docs: 'DocumentArray', **kwargs):
         modified_note = docs[0]
         with self._docs:
-            for old_note in self._docs:
+            for i, old_note in enumerate(self._docs):
                 if modified_note.text == old_note.text:
                     self._docs.remove(old_note)
                     old_note.chunks.clear()
+                    self._docs.__delitem__(i)
                     break
 
 
