@@ -1,0 +1,8 @@
+jtype: Flow
+executors:
+  - name: simple_indexer
+    uses: SimpleIndexer
+    py_modules: 
+     - ./executors/__init__.py
+    workspace: "workspace"
+
